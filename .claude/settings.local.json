@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/fincas/mf-001)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/fincas/MF-002)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/fincas/la-esperanza)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/fincas/mf-099)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/nosotros)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/fincas)"
+    ]
+  }
+}

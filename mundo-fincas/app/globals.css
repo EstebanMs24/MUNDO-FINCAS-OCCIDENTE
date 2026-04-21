@@ -1,0 +1,184 @@
+@import "tailwindcss";
+
+:root {
+  --background: #f9faf8;
+  --foreground: #1a1a1a;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* ── Animated WhatsApp reserve button (Uiverse.io by Randdose) ──────────────── */
+.btn-wa {
+  all: unset;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  padding: 0.65em 2em;
+  border: mediumspringgreen solid 0.15em;
+  border-radius: 0.35em;
+  color: mediumspringgreen;
+  font-size: 1.15em;
+  font-weight: 600;
+  cursor: pointer;
+  overflow: hidden;
+  transition: border 300ms, color 300ms;
+  user-select: none;
+  width: 100%;
+  text-decoration: none;
+  margin-top: 1rem;
+}
+
+.btn-wa-inner {
+  z-index: 1;
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+}
+
+.btn-wa:hover {
+  color: #212121;
+}
+
+.btn-wa:active {
+  border-color: teal;
+}
+
+.btn-wa::before,
+.btn-wa::after {
+  content: "";
+  position: absolute;
+  width: 10em;
+  aspect-ratio: 1;
+  background: mediumspringgreen;
+  opacity: 0.45;
+  border-radius: 50%;
+  transition: transform 500ms, background 300ms;
+}
+
+.btn-wa::before {
+  left: 0;
+  transform: translateX(-9em);
+}
+
+.btn-wa::after {
+  right: 0;
+  transform: translateX(9em);
+}
+
+.btn-wa:hover::before {
+  transform: translateX(-1.5em);
+}
+
+.btn-wa:hover::after {
+  transform: translateX(1.5em);
+}
+
+.btn-wa:active::before,
+.btn-wa:active::after {
+  background: teal;
+}
+
+/* ── Navbar "Reservar" button (Personalizado: Texto negro + Fondo #98ff96) ── */
+.btn-reservar {
+  position: relative;
+  padding: 10px 22px;
+  border-radius: 7px;
+  /* Cambiado al nuevo verde para que el borde combine desde el inicio */
+  border: 1px solid #98ff96; 
+  font-size: 14px;
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 2px;
+  background: transparent;
+  /* Texto en negro para que resalte en tu navbar */
+  color: #1a1a1a;
+  overflow: hidden;
+  box-shadow: 0 0 0 0 transparent;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  flex-shrink: 0;
+  cursor: pointer;
+  transition: all 0.2s ease-in;
+}
+
+.btn-reservar:hover {
+  /* Fondo verde clarito solicitado */
+  background: #98ff96;
+  /* Sombra (glow) ajustada al nuevo tono verde */
+  box-shadow: 0 0 30px 5px rgba(152, 255, 150, 0.7);
+  /* Texto se mantiene negro al pararse sobre él */
+  color: #1a1a1a;
+  transition: all 0.2s ease-out;
+}
+
+.btn-reservar:hover::before {
+  animation: btn-reservar-shine 0.5s 0s linear;
+}
+
+.btn-reservar::before {
+  content: '';
+  display: block;
+  width: 0px;
+  height: 86%;
+  position: absolute;
+  top: 7%;
+  left: 0%;
+  opacity: 0;
+  background: #fff;
+  box-shadow: 0 0 50px 30px #fff;
+  transform: skewX(-20deg);
+}
+
+/* Agregué la animación por si no la tenías definida abajo, 
+   esto hace que el efecto de brillo funcione al hacer hover */
+@keyframes btn-reservar-shine {
+  0% {
+    left: -10%;
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    left: 110%;
+    opacity: 0;
+  }
+}
+
+@keyframes btn-reservar-shine {
+  from {
+    opacity: 0;
+    left: 0%;
+  }
+  50% {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+    left: 100%;
+  }
+}
+
+.btn-reservar:active {
+  box-shadow: 0 0 0 0 transparent;
+  transition: box-shadow 0.2s ease-in;
+}
