@@ -9,6 +9,11 @@
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
+  --color-brand-blue: #2DAAE1;
+  --color-brand-green: #6BCB77;
+  --color-brand-coral: #FF5A5F;
+  --color-brand-yellow: #FFD93D;
+  --color-brand-dark: #333333;
 }
 
 body {
