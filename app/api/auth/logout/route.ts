@@ -8,10 +8,6 @@ export async function POST(request: NextRequest) {
     cookieStore.delete(COOKIE_NAME);
     return Response.json({ success: true });
   } catch (error) {
-    console.error("Logout error:", error);
-    return Response.json(
-      { error: "Logout failed" },
-      { status: 500 }
-    );
+    return Response.json({ error: "Logout failed" }, { status: 500 });
   }
 }
