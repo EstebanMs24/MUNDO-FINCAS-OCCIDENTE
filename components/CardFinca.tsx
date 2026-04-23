@@ -1,8 +1,8 @@
 import Link from "next/link";
-import type { Finca } from "@/data/fincas";
+import type { FincaAPI } from "@/types/finca";
 
 interface Props {
-  finca: Finca;
+  finca: FincaAPI;
 }
 
 export default function CardFinca({ finca }: Props) {
@@ -26,10 +26,6 @@ export default function CardFinca({ finca }: Props) {
             🏊 Piscina
           </div>
         )}
-        {/* Code badge */}
-        <div className="absolute bottom-3 left-3 bg-black/50 text-white/90 text-xs font-mono font-semibold px-2.5 py-1 rounded-full backdrop-blur-sm tracking-wider">
-          {finca.codigo}
-        </div>
       </div>
 
       {/* Content */}

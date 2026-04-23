@@ -1,34 +1,37 @@
-import { fincas, WHATSAPP_EMAIL } from "@/data/fincas";
+import { Suspense } from "react";
+import type { Metadata } from "next";
 import GaleriaImagenes from "@/components/GaleriaImagenes";
 import BotonWhatsApp from "@/components/BotonWhatsApp";
 import { notFound } from "next/navigation";
-import type { Metadata } from "next";
 import Link from "next/link";
+import { FincaAPI } from "@/types/finca";
+import { WHATSAPP_EMAIL } from "@/data/fincas";
 
 interface Props {
   params: Promise<{ id: string }>;
 }
 
-function buscarFinca(id: string) {
-  const q = id.toLowerCase();
-  return fincas.find(
-    (f) => f.id === q || f.codigo.toLowerCase() === q
-  );
+async function getFinca(id: string): Promise<FincaAPI | null> {
+  try {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000"}/api/fincas/${id}`,
+      { next: { revalidate: 3600 } }
+    );
+    if (!res.ok) return null;
+    return res.json();
+  } catch {
+    return null;
+  }
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { id } = await params;
-  const finca = buscarFinca(id);
+  const finca = await getFinca(id);
   if (!finca) return { title: "Finca no encontrada — Mundo Fincas" };
   return {
     title: `${finca.nombre} — Mundo Fincas`,
     description: finca.descripcion,
   };
-}
-
-export function generateStaticParams() {
-  // Expone tanto el slug como el código como rutas válidas
-  return fincas.flatMap((f) => [{ id: f.id }, { id: f.codigo.toLowerCase() }]);
 }
 
 const iconoServicio: Record<string, string> = {
@@ -50,7 +53,7 @@ const iconoServicio: Record<string, string> = {
 
 export default async function FincaDetallePage({ params }: Props) {
   const { id } = await params;
-  const finca = buscarFinca(id);
+  const finca = await getFinca(id);
 
   if (!finca) notFound();
 

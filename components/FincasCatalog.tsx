@@ -2,11 +2,14 @@
 
 import { useState, useMemo, useEffect, useRef } from "react";
 import { useSearchParams } from "next/navigation";
-import { fincas, SECTORES } from "@/data/fincas";
+import { SECTORES } from "@/data/fincas";
 import CardFinca from "@/components/CardFinca";
+import { FincaAPI } from "@/types/finca";
 
 export default function FincasCatalog() {
   const searchParams = useSearchParams();
+  const [allFincas, setAllFincas] = useState<FincaAPI[]>([]);
+  const [loading, setLoading] = useState(true);
 
   // ── Filter state ──────────────────────────────────────────────────────────
   const [busqueda, setBusqueda] = useState("");
@@ -25,6 +28,23 @@ export default function FincasCatalog() {
     setSectorActivo(s);
   }, [searchParams]);
 
+  // Fetch fincas from API
+  useEffect(() => {
+    const fetchFincas = async () => {
+      try {
+        const res = await fetch("/api/fincas");
+        const data = await res.json();
+        setAllFincas(data);
+      } catch (error) {
+        console.error("Error fetching fincas:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchFincas();
+  }, []);
+
   // Close sector dropdown on outside click
   useEffect(() => {
     if (!sectorOpen) return;
@@ -40,19 +60,18 @@ export default function FincasCatalog() {
   // ── Filtered fincas ───────────────────────────────────────────────────────
   const filtradas = useMemo(() => {
     const q = busqueda.trim().toLowerCase();
-    return fincas.filter((f) => {
+    return allFincas.filter((f) => {
       if (f.precio > precioMax) return false;
       if (f.capacidad < personasMin) return false;
       if (soloPiscina && !f.servicios.includes("Piscina")) return false;
       if (sectorActivo && f.ubicacion !== sectorActivo) return false;
       if (q) {
         const matchNombre = f.nombre.toLowerCase().includes(q);
-        const matchCodigo = f.codigo.toLowerCase().includes(q);
-        if (!matchNombre && !matchCodigo) return false;
+        if (!matchNombre) return false;
       }
       return true;
     });
-  }, [busqueda, precioMax, personasMin, soloPiscina, sectorActivo]);
+  }, [busqueda, precioMax, personasMin, soloPiscina, sectorActivo, allFincas]);
 
   const hayFiltros =
     busqueda !== "" ||
@@ -180,7 +199,7 @@ export default function FincasCatalog() {
                       </button>
                       <div className="border-t border-gray-100" />
                       {SECTORES.map((sector) => {
-                        const count = fincas.filter((f) => f.ubicacion === sector).length;
+                        const count = allFincas.filter((f) => f.ubicacion === sector).length;
                         return (
                           <button
                             key={sector}
@@ -273,6 +292,13 @@ export default function FincasCatalog() {
 
           {/* ── Finca grid ── */}
           <div className="flex-1">
+            {loading ? (
+              <div className="flex flex-col items-center justify-center py-24 text-center">
+                <span className="text-6xl mb-4">⏳</span>
+                <p className="text-gray-500">Cargando fincas...</p>
+              </div>
+            ) : (
+              <>
             {/* Active filters chips */}
             {hayFiltros && (
               <div className="flex flex-wrap gap-2 mb-5">
@@ -341,6 +367,8 @@ export default function FincasCatalog() {
                   Limpiar filtros
                 </button>
               </div>
+            )}
+              </>
             )}
           </div>
         </div>

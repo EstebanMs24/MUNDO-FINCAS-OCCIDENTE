@@ -1,6 +1,8 @@
 import Link from "next/link";
 import CardFinca from "@/components/CardFinca";
-import { fincas, WHATSAPP_NUMBER } from "@/data/fincas";
+import { WHATSAPP_NUMBER } from "@/data/fincas";
+import { FincaAPI, parseFinca } from "@/types/finca";
+import { prisma } from "@/lib/prisma";
 
 const WhatsAppIcon = () => (
   <svg viewBox="0 0 24 24" className="w-5 h-5 fill-current flex-shrink-0">
@@ -26,8 +28,19 @@ const features = [
   },
 ];
 
-export default function HomePage() {
-  const destacadas = fincas.filter((f) => f.destacada);
+export default async function HomePage() {
+  let destacadas: FincaAPI[] = [];
+
+  try {
+    const rows = await prisma.finca.findMany({
+      where: { destacada: true },
+      orderBy: { id: "asc" },
+    });
+    destacadas = rows.map(parseFinca);
+  } catch (error) {
+    console.error("Error fetching featured fincas:", error);
+  }
+
   const ctaWA = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
     "Hola, quiero información sobre las fincas disponibles."
   )}`;
