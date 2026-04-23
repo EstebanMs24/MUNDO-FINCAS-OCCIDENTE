@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 
 export default function AdminLoginPage() {
   const router = useRouter();
-  const [email, setEmail] = useState("admin@mundofincas.com");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -86,9 +86,6 @@ export default function AdminLoginPage() {
           </button>
         </form>
 
-        <p className="text-center text-sm text-gray-500">
-          Por defecto: admin@mundofincas.com
-        </p>
       </div>
     </div>
   );

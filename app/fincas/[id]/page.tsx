@@ -1,11 +1,11 @@
-import { Suspense } from "react";
 import type { Metadata } from "next";
 import GaleriaImagenes from "@/components/GaleriaImagenes";
 import BotonWhatsApp from "@/components/BotonWhatsApp";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { FincaAPI } from "@/types/finca";
+import { FincaAPI, parseFinca } from "@/types/finca";
 import { WHATSAPP_EMAIL } from "@/data/fincas";
+import { prisma } from "@/lib/prisma";
 
 interface Props {
   params: Promise<{ id: string }>;
@@ -13,12 +13,11 @@ interface Props {
 
 async function getFinca(id: string): Promise<FincaAPI | null> {
   try {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000"}/api/fincas/${id}`,
-      { next: { revalidate: 3600 } }
-    );
-    if (!res.ok) return null;
-    return res.json();
+    const finca = await prisma.finca.findUnique({
+      where: { id: parseInt(id) },
+    });
+    if (!finca) return null;
+    return parseFinca(finca);
   } catch {
     return null;
   }
