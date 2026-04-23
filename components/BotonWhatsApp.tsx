@@ -80,4 +80,4 @@ export default function BotonWhatsApp({ nombreFinca }: Props) {
   );
 }
 
-//Pruubagit
+//Pruuba
