@@ -52,7 +52,7 @@ export default async function HomePage() {
         className="relative flex items-center justify-center text-white"
         style={{
           minHeight: "calc(100vh - 64px)",
-          backgroundImage: `linear-gradient(to bottom, rgba(0,0,0,0.25) 0%, rgba(0,0,0,0.60) 100%), url(https://picsum.photos/seed/mundo-fincas-hero/1920/1080)`,
+          backgroundImage: `linear-gradient(to bottom, rgba(0,0,0,0.25) 0%, rgba(0,0,0,0.60) 100%), url(/FONDO-BACK.png)`,
           backgroundSize: "cover",
           backgroundPosition: "center",
         }}
