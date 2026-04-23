@@ -79,3 +79,5 @@ export default function BotonWhatsApp({ nombreFinca }: Props) {
     </div>
   );
 }
+
+//Pruubagit
