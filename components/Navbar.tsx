@@ -128,6 +128,17 @@ export default function Navbar() {
             </div>
 
             <Link
+              href="/lotes"
+              className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                pathname.startsWith("/lotes")
+                  ? "text-green-700 bg-green-50"
+                  : "text-gray-600 hover:text-green-700 hover:bg-green-50"
+              }`}
+            >
+              Lotes
+            </Link>
+
+            <Link
               href="/contacto"
               className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                 pathname === "/contacto"
@@ -222,6 +233,15 @@ export default function Navbar() {
                 </div>
               )}
             </div>
+
+            <Link
+              href="/lotes"
+              className={`px-4 py-3 rounded-lg text-sm font-medium transition-colors ${
+                pathname.startsWith("/lotes") ? "text-green-700 bg-green-50" : "text-gray-600"
+              }`}
+            >
+              Lotes
+            </Link>
 
             <Link
               href="/contacto"

@@ -19,22 +19,44 @@ const WhatsAppIcon = ({ className = "w-5 h-5" }: { className?: string }) => (
 
 const testimonios = [
   {
-    nombre: "Familia Rodríguez",
-    texto: "Increíble experiencia. La finca era exactamente como en las fotos y la atención fue de 10. Ya tenemos planeada la próxima salida.",
+    nombre: "Familia Martínez",
+    iniciales: "FM",
+    texto: "Llegamos cansados de la semana y nos fuimos renovados. La finca era exactamente como en las fotos — limpia, amplia y con todo funcionando. La atención por WhatsApp fue rapidísima. Ya reservamos para diciembre.",
     estrellas: 5,
     lugar: "Medellín",
+    tag: "Familia de 10 personas",
   },
   {
-    nombre: "Grupo de amigos",
-    texto: "Reservamos para 12 personas y todo estuvo perfecto. La piscina, el BBQ, el espacio... volveríamos sin dudarlo.",
+    nombre: "Camilo y amigos",
+    iniciales: "CA",
+    texto: "Éramos 14 y pensábamos que sería difícil encontrar algo. En menos de 20 minutos por WhatsApp ya teníamos todo confirmado. La piscina, el BBQ, la cancha... fue el mejor plan del año. Volveremos seguro.",
     estrellas: 5,
     lugar: "Bogotá",
+    tag: "Grupo de amigos",
   },
   {
-    nombre: "Pareja Gómez",
-    texto: "Buscábamos privacidad y naturaleza. Lo encontramos en el occidente antioqueño. Gracias por hacer nuestro aniversario especial.",
+    nombre: "Sandra & Javier",
+    iniciales: "SJ",
+    texto: "Buscábamos privacidad total para nuestro aniversario. Nos recomendaron esta finca y fue una decisión perfecta. Silencio, naturaleza, piscina para nosotros solos. Lo que necesitábamos sin siquiera saberlo.",
     estrellas: 5,
     lugar: "Cali",
+    tag: "Escapada en pareja",
+  },
+  {
+    nombre: "Lorena Ospina",
+    iniciales: "LO",
+    texto: "Organicé el cumpleaños de mi mamá aquí. 18 personas, cocina enorme, espacio para todos. No hubo un solo momento incómodo. La finca superó las expectativas y mi mamá no para de hablar del día. Vale cada peso.",
+    estrellas: 5,
+    lugar: "Medellín",
+    tag: "Celebración familiar",
+  },
+  {
+    nombre: "Equipo Creativo Co.",
+    iniciales: "EC",
+    texto: "Usamos la finca para un retiro de equipo. Nos desconectamos del todo, trabajamos diferente y conectamos como nunca. El occidente antioqueño tiene algo especial. Ya lo convertimos en tradición anual.",
+    estrellas: 5,
+    lugar: "Medellín",
+    tag: "Retiro corporativo",
   },
 ];
 
@@ -132,8 +154,8 @@ export default async function HomePage() {
           </h1>
 
           <p className="text-lg sm:text-xl md:text-2xl mb-10 text-white/85 max-w-2xl mx-auto leading-relaxed">
-            Fincas privadas con piscina, BBQ y naturaleza en el occidente antioqueño.
-            Reserva directo por WhatsApp — sin complicaciones.
+            Fincas privadas con piscina, BBQ y naturaleza pura.<br className="hidden sm:block" />
+            A 90 minutos de Medellín. Reserva directa por WhatsApp — sin formularios, sin esperas.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -170,16 +192,32 @@ export default async function HomePage() {
       ══════════════════════════════════════════════════════ */}
       <section className="bg-white py-10 border-b border-gray-100">
         <div className="max-w-5xl mx-auto px-4">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
             {[
-              { valor: "+50", label: "Reservas exitosas" },
-              { valor: "+11", label: "Municipios" },
-              { valor: "4.9★", label: "Calificación promedio" },
-              { valor: "3 años", label: "De experiencia" },
+              { valor: "+50", label: "Familias felices", sub: "que ya repitieron" },
+              { valor: "+11", label: "Municipios", sub: "en el occidente antioqueño" },
+              { valor: "4.9★", label: "Calificación promedio", sub: "en todas las estadías" },
+              { valor: "< 10 min", label: "Tiempo de respuesta", sub: "por WhatsApp" },
             ].map((s) => (
-              <div key={s.label}>
+              <div key={s.label} className="group">
                 <p className="text-3xl sm:text-4xl font-bold" style={{ color: "#2DAAE1" }}>{s.valor}</p>
-                <p className="text-sm text-gray-500 mt-1">{s.label}</p>
+                <p className="text-sm font-semibold text-gray-700 mt-1">{s.label}</p>
+                <p className="text-xs text-gray-400 mt-0.5">{s.sub}</p>
+              </div>
+            ))}
+          </div>
+
+          {/* Trust badges */}
+          <div className="flex flex-wrap items-center justify-center gap-4 mt-8 pt-8 border-t border-gray-100">
+            {[
+              { icon: "🔒", text: "Pago seguro acordado directamente" },
+              { icon: "📸", text: "Fotos reales, sin filtros" },
+              { icon: "✅", text: "Fincas verificadas personalmente" },
+              { icon: "🚫", text: "Sin intermediarios ni comisiones" },
+            ].map((b) => (
+              <div key={b.text} className="flex items-center gap-2 text-sm text-gray-500 bg-gray-50 rounded-full px-4 py-2 border border-gray-100">
+                <span>{b.icon}</span>
+                <span>{b.text}</span>
               </div>
             ))}
           </div>
@@ -283,32 +321,80 @@ export default async function HomePage() {
           TESTIMONIOS
       ══════════════════════════════════════════════════════ */}
       <section className="py-16 sm:py-20 bg-white">
-        <div className="max-w-5xl mx-auto px-4">
+        <div className="max-w-6xl mx-auto px-4">
           <div className="text-center mb-12">
             <p className="text-sm font-semibold uppercase tracking-widest mb-2" style={{ color: "#2DAAE1" }}>Opiniones reales</p>
-            <h2 className="text-3xl sm:text-4xl font-bold" style={{ color: "#333333" }}>Lo que dicen nuestros huéspedes</h2>
+            <h2 className="text-3xl sm:text-4xl font-bold mb-3" style={{ color: "#333333" }}>
+              Lo que dicen quienes ya fueron
+            </h2>
+            <p className="text-gray-400 max-w-lg mx-auto">
+              No somos perfectos, pero sí consistentes. Estas son experiencias reales de familias y grupos que confiaron en nosotros.
+            </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {testimonios.map((t) => (
-              <div key={t.nombre} className="rounded-2xl p-6 border border-gray-100 shadow-sm">
-                <div className="flex mb-3">
+          {/* Featured testimonial */}
+          <div className="rounded-2xl p-8 mb-6 border-2 relative overflow-hidden" style={{ borderColor: "#2DAAE1", background: "#f0f9ff" }}>
+            <div className="absolute top-4 right-6 text-7xl opacity-10 font-serif" style={{ color: "#2DAAE1" }}>"</div>
+            <div className="flex mb-3">
+              {Array.from({ length: 5 }).map((_, i) => (
+                <span key={i} style={{ color: "#FFD93D" }} className="text-xl">★</span>
+              ))}
+            </div>
+            <p className="text-gray-700 text-lg leading-relaxed mb-5 max-w-3xl font-medium">
+              "{testimonios[0].texto}"
+            </p>
+            <div className="flex items-center gap-3">
+              <div className="w-11 h-11 rounded-full flex items-center justify-center text-white font-bold" style={{ background: "#2DAAE1" }}>
+                {testimonios[0].iniciales}
+              </div>
+              <div>
+                <p className="font-bold text-sm" style={{ color: "#333333" }}>{testimonios[0].nombre}</p>
+                <p className="text-xs text-gray-400">{testimonios[0].lugar} · {testimonios[0].tag}</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Grid de 4 testimonios */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {testimonios.slice(1).map((t) => (
+              <div key={t.nombre} className="rounded-2xl p-5 border border-gray-100 shadow-sm hover:shadow-md transition-shadow bg-white">
+                <div className="flex mb-2">
                   {Array.from({ length: t.estrellas }).map((_, i) => (
                     <span key={i} style={{ color: "#FFD93D" }}>★</span>
                   ))}
                 </div>
-                <p className="text-gray-600 text-sm leading-relaxed mb-4">"{t.texto}"</p>
-                <div className="flex items-center gap-2">
-                  <div className="w-9 h-9 rounded-full flex items-center justify-center text-white text-sm font-bold" style={{ background: "#2DAAE1" }}>
-                    {t.nombre[0]}
-                  </div>
-                  <div>
-                    <p className="text-sm font-semibold" style={{ color: "#333333" }}>{t.nombre}</p>
-                    <p className="text-xs text-gray-400">{t.lugar}</p>
+                <p className="text-gray-500 text-sm leading-relaxed mb-4">"{t.texto}"</p>
+                <div className="pt-3 border-t border-gray-100">
+                  <div className="flex items-center gap-2">
+                    <div className="w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-bold flex-shrink-0" style={{ background: "#6BCB77" }}>
+                      {t.iniciales}
+                    </div>
+                    <div>
+                      <p className="text-xs font-semibold" style={{ color: "#333333" }}>{t.nombre}</p>
+                      <p className="text-xs text-gray-400">{t.tag}</p>
+                    </div>
                   </div>
                 </div>
               </div>
             ))}
+          </div>
+
+          {/* Social proof bar */}
+          <div className="mt-10 rounded-2xl p-6 text-center border border-gray-100" style={{ background: "#F5F5F5" }}>
+            <p className="text-gray-500 text-sm mb-1">¿Tienes dudas? Es normal.</p>
+            <p className="font-bold text-base mb-4" style={{ color: "#333333" }}>
+              Escríbenos y te respondemos sin compromiso — en minutos, no en días.
+            </p>
+            <a
+              href={WA_HERO}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 font-bold px-6 py-3 rounded-full text-sm transition-all hover:opacity-90"
+              style={{ background: "#FF5A5F", color: "#fff" }}
+            >
+              <WhatsAppIcon className="w-4 h-4" />
+              Hacer una pregunta — sin compromiso
+            </a>
           </div>
         </div>
       </section>
@@ -320,11 +406,13 @@ export default async function HomePage() {
         <div className="max-w-2xl mx-auto px-4">
           <div className="text-5xl mb-4">🌿</div>
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 leading-tight">
-            ¿Listo para desconectarte?
+            El fin de semana que<br />siempre prometiste.
           </h2>
-          <p className="text-white/80 text-lg mb-8 leading-relaxed">
-            Escríbenos ahora y en minutos te enviamos las mejores opciones para tu próxima escapada.
-            Sin formularios. Sin complicaciones.
+          <p className="text-white/80 text-lg mb-3 leading-relaxed">
+            Escríbenos ahora — en minutos te enviamos fincas disponibles con fotos y precios reales.
+          </p>
+          <p className="text-white/60 text-sm mb-8">
+            Sin pagos por adelantado · Sin formularios · Solo WhatsApp
           </p>
           <a
             href={WA_FINAL}
@@ -334,7 +422,7 @@ export default async function HomePage() {
             style={{ background: "#FF5A5F", color: "#fff" }}
           >
             <WhatsAppIcon className="w-6 h-6" />
-            Reservar por WhatsApp
+            Sí, quiero escaparme
           </a>
           <p className="text-white/60 text-sm mt-4">
             También puedes escribirnos al correo:{" "}

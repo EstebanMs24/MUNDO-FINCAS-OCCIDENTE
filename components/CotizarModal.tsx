@@ -1,0 +1,219 @@
+"use client";
+
+import { useState, useEffect } from "react";
+import { WHATSAPP_NUMBER } from "@/data/fincas";
+
+interface Props {
+  nombreFinca: string;
+  onClose: () => void;
+}
+
+const WhatsAppIcon = () => (
+  <svg viewBox="0 0 24 24" className="w-5 h-5 fill-current flex-shrink-0">
+    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+  </svg>
+);
+
+const PRESUPUESTOS = [
+  { label: "Menos de $300.000", value: "menos de $300.000" },
+  { label: "$300.000 – $500.000", value: "$300.000 a $500.000" },
+  { label: "$500.000 – $800.000", value: "$500.000 a $800.000" },
+  { label: "Más de $800.000", value: "más de $800.000" },
+  { label: "Flexible / No tengo límite claro", value: "flexible" },
+];
+
+function formatFecha(iso: string) {
+  return new Date(iso + "T00:00:00").toLocaleDateString("es-CO", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
+}
+
+export default function CotizarModal({ nombreFinca, onClose }: Props) {
+  const [fecha, setFecha] = useState("");
+  const [personas, setPersonas] = useState(2);
+  const [presupuesto, setPresupuesto] = useState("");
+  const [errors, setErrors] = useState<Record<string, string>>({});
+
+  const hoy = new Date().toISOString().split("T")[0];
+
+  // Close on Escape
+  useEffect(() => {
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    document.addEventListener("keydown", handleKey);
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.removeEventListener("keydown", handleKey);
+      document.body.style.overflow = "";
+    };
+  }, [onClose]);
+
+  const validate = () => {
+    const e: Record<string, string> = {};
+    if (!fecha) e.fecha = "Selecciona una fecha de llegada";
+    if (!presupuesto) e.presupuesto = "Selecciona tu rango de presupuesto";
+    return e;
+  };
+
+  const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    const errs = validate();
+    if (Object.keys(errs).length) {
+      e.preventDefault();
+      setErrors(errs);
+      return;
+    }
+    setErrors({});
+  };
+
+  const fechaDisplay = fecha ? formatFecha(fecha) : "[fecha por definir]";
+  const mensaje = `Hola 👋 Estoy interesado en la finca *${nombreFinca}* para *${personas} persona${personas !== 1 ? "s" : ""}*, llegando el *${fechaDisplay}*, con presupuesto de *${presupuesto || "[por definir]"}* por noche. ¿Está disponible?`;
+  const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(mensaje)}`;
+
+  const inputBase =
+    "w-full border rounded-xl px-4 py-2.5 text-gray-900 text-sm focus:outline-none focus:ring-2 transition-all";
+
+  return (
+    /* Overlay */
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center p-4"
+      style={{ background: "rgba(0,0,0,0.55)", backdropFilter: "blur(4px)" }}
+      onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
+    >
+      {/* Modal box */}
+      <div
+        className="bg-white rounded-2xl shadow-2xl w-full max-w-md relative"
+        style={{ maxHeight: "90vh", overflowY: "auto" }}
+      >
+        {/* Header */}
+        <div
+          className="flex items-center justify-between px-6 py-5 border-b border-gray-100 sticky top-0 bg-white rounded-t-2xl z-10"
+        >
+          <div>
+            <h2 className="font-bold text-lg" style={{ color: "#333333" }}>
+              Cotizar finca
+            </h2>
+            <p className="text-sm font-medium" style={{ color: "#2DAAE1" }}>
+              {nombreFinca}
+            </p>
+          </div>
+          <button
+            onClick={onClose}
+            className="w-8 h-8 flex items-center justify-center rounded-full text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-all text-lg font-light"
+            aria-label="Cerrar"
+          >
+            ✕
+          </button>
+        </div>
+
+        {/* Form */}
+        <div className="px-6 py-5 space-y-4">
+          {/* Fecha */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1.5">
+              Fecha de llegada <span style={{ color: "#FF5A5F" }}>*</span>
+            </label>
+            <input
+              type="date"
+              value={fecha}
+              min={hoy}
+              onChange={(e) => {
+                setFecha(e.target.value);
+                setErrors((prev) => ({ ...prev, fecha: "" }));
+              }}
+              className={`${inputBase} ${
+                errors.fecha
+                  ? "border-red-300 focus:ring-red-200"
+                  : "border-gray-200 focus:ring-blue-200"
+              }`}
+            />
+            {errors.fecha && (
+              <p className="text-xs mt-1" style={{ color: "#FF5A5F" }}>
+                {errors.fecha}
+              </p>
+            )}
+          </div>
+
+          {/* Personas */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1.5">
+              Número de personas
+            </label>
+            <select
+              value={personas}
+              onChange={(e) => setPersonas(Number(e.target.value))}
+              className={`${inputBase} border-gray-200 focus:ring-blue-200`}
+            >
+              {Array.from({ length: 30 }, (_, i) => i + 1).map((n) => (
+                <option key={n} value={n}>
+                  {n} persona{n !== 1 ? "s" : ""}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/* Presupuesto */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1.5">
+              Presupuesto por noche <span style={{ color: "#FF5A5F" }}>*</span>
+            </label>
+            <select
+              value={presupuesto}
+              onChange={(e) => {
+                setPresupuesto(e.target.value);
+                setErrors((prev) => ({ ...prev, presupuesto: "" }));
+              }}
+              className={`${inputBase} ${
+                errors.presupuesto
+                  ? "border-red-300 focus:ring-red-200"
+                  : "border-gray-200 focus:ring-blue-200"
+              }`}
+            >
+              <option value="">Selecciona tu rango...</option>
+              {PRESUPUESTOS.map((p) => (
+                <option key={p.value} value={p.value}>
+                  {p.label}
+                </option>
+              ))}
+            </select>
+            {errors.presupuesto && (
+              <p className="text-xs mt-1" style={{ color: "#FF5A5F" }}>
+                {errors.presupuesto}
+              </p>
+            )}
+          </div>
+
+          {/* Preview */}
+          <div
+            className="rounded-xl p-3 text-xs leading-relaxed border"
+            style={{ background: "#F5F5F5", borderColor: "#e5e7eb", color: "#555" }}
+          >
+            <span className="font-semibold" style={{ color: "#333" }}>
+              Mensaje que enviarás:{" "}
+            </span>
+            {mensaje}
+          </div>
+
+          {/* CTA */}
+          <a
+            href={url}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={handleClick}
+            className="w-full flex items-center justify-center gap-2.5 py-3.5 rounded-xl font-bold text-white text-base transition-all hover:opacity-90 active:scale-95"
+            style={{ background: "#FF5A5F" }}
+          >
+            <WhatsAppIcon />
+            Enviar cotización por WhatsApp
+          </a>
+
+          <p className="text-center text-xs text-gray-400 pb-1">
+            Sin compromiso · Respuesta en minutos
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}

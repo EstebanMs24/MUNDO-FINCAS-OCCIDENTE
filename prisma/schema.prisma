@@ -19,3 +19,15 @@ model Finca {
   destacada     Boolean  @default(false)
   fechaCreacion DateTime @default(now()) @map("fecha_creacion")
 }
+
+model Lote {
+  id            Int      @id @default(autoincrement())
+  nombre        String
+  descripcion   String
+  precio        Int
+  ubicacion     String
+  area          Int
+  imagenes      String   @default("[]")
+  destacado     Boolean  @default(false)
+  fechaCreacion DateTime @default(now()) @map("fecha_creacion")
+}

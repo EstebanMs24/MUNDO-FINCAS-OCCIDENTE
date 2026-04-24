@@ -1,6 +1,9 @@
+"use client";
+
+import { useState } from "react";
 import Link from "next/link";
 import type { FincaAPI } from "@/types/finca";
-import { WHATSAPP_NUMBER } from "@/data/fincas";
+import CotizarModal from "./CotizarModal";
 
 interface Props {
   finca: FincaAPI;
@@ -13,79 +16,118 @@ const WhatsAppIcon = () => (
 );
 
 export default function CardFinca({ finca }: Props) {
-  const waMsg = encodeURIComponent(`Hola 👋 Me interesa cotizar la finca *${finca.nombre}*. ¿Está disponible?`);
-  const waUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${waMsg}`;
+  const [showModal, setShowModal] = useState(false);
 
   return (
-    <div className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 group border border-gray-100">
-      {/* Image */}
-      <div className="relative overflow-hidden h-52">
-        {finca.imagenes[0] ? (
-          <img
-            src={finca.imagenes[0]}
-            alt={finca.nombre}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-          />
-        ) : (
-          <div className="w-full h-full flex items-center justify-center" style={{ background: "#F5F5F5" }}>
-            <span className="text-5xl">🏡</span>
+    <>
+      <div className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 group border border-gray-100">
+        {/* Image */}
+        <div className="relative overflow-hidden h-52">
+          {finca.imagenes[0] ? (
+            <img
+              src={finca.imagenes[0]}
+              alt={finca.nombre}
+              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+            />
+          ) : (
+            <div
+              className="w-full h-full flex items-center justify-center"
+              style={{ background: "#F5F5F5" }}
+            >
+              <span className="text-5xl">🏡</span>
+            </div>
+          )}
+          {/* Price badge */}
+          <div
+            className="absolute top-3 right-3 bg-white/95 backdrop-blur-sm rounded-full px-3 py-1 text-sm font-bold shadow-sm"
+            style={{ color: "#2DAAE1" }}
+          >
+            ${finca.precio.toLocaleString("es-CO")}
+            <span className="font-normal text-xs text-gray-400">/noche</span>
           </div>
-        )}
-        {/* Price badge */}
-        <div className="absolute top-3 right-3 bg-white/95 backdrop-blur-sm rounded-full px-3 py-1 text-sm font-bold shadow-sm" style={{ color: "#2DAAE1" }}>
-          ${finca.precio.toLocaleString("es-CO")}
-          <span className="font-normal text-xs text-gray-400">/noche</span>
+          {/* Pool badge */}
+          {finca.servicios.includes("Piscina") && (
+            <div
+              className="absolute top-3 left-3 text-white text-xs font-semibold px-2.5 py-1 rounded-full"
+              style={{ background: "#2DAAE1" }}
+            >
+              🏊 Piscina
+            </div>
+          )}
         </div>
-        {/* Pool badge */}
-        {finca.servicios.includes("Piscina") && (
-          <div className="absolute top-3 left-3 text-white text-xs font-semibold px-2.5 py-1 rounded-full" style={{ background: "#2DAAE1" }}>
-            🏊 Piscina
-          </div>
-        )}
-      </div>
 
-      {/* Content */}
-      <div className="p-5">
-        <h3 className="font-bold text-lg leading-tight mb-1" style={{ color: "#333333" }}>{finca.nombre}</h3>
+        {/* Content */}
+        <div className="p-5">
+          <h3
+            className="font-bold text-lg leading-tight mb-1"
+            style={{ color: "#333333" }}
+          >
+            {finca.nombre}
+          </h3>
 
-        <p className="text-gray-400 text-sm mb-3 flex items-center gap-1">
-          <svg className="w-3.5 h-3.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20" style={{ color: "#6BCB77" }}>
-            <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
-          </svg>
-          {finca.ubicacion}, Occidente Antioqueño
-        </p>
-
-        <div className="flex items-center gap-3 text-sm text-gray-400 mb-4">
-          <span className="flex items-center gap-1">
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
+          <p className="text-gray-400 text-sm mb-3 flex items-center gap-1">
+            <svg
+              className="w-3.5 h-3.5 flex-shrink-0"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+              style={{ color: "#6BCB77" }}
+            >
+              <path
+                fillRule="evenodd"
+                d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z"
+                clipRule="evenodd"
+              />
             </svg>
-            Hasta {finca.capacidad} personas
-          </span>
-          <span className="text-gray-200">·</span>
-          <span>{finca.servicios.length} servicios</span>
-        </div>
+            {finca.ubicacion}, Occidente Antioqueño
+          </p>
 
-        <div className="flex gap-2">
-          <Link
-            href={`/fincas/${finca.id}`}
-            className="flex-1 text-center py-2.5 rounded-xl text-sm font-semibold transition-colors border"
-            style={{ borderColor: "#2DAAE1", color: "#2DAAE1" }}
-          >
-            Ver finca
-          </Link>
-          <a
-            href={waUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-sm font-semibold text-white transition-all hover:opacity-90"
-            style={{ background: "#FF5A5F" }}
-          >
-            <WhatsAppIcon />
-            Cotizar
-          </a>
+          <div className="flex items-center gap-3 text-sm text-gray-400 mb-4">
+            <span className="flex items-center gap-1">
+              <svg
+                className="w-4 h-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"
+                />
+              </svg>
+              Hasta {finca.capacidad} personas
+            </span>
+            <span className="text-gray-200">·</span>
+            <span>{finca.servicios.length} servicios</span>
+          </div>
+
+          <div className="flex gap-2">
+            <Link
+              href={`/fincas/${finca.id}`}
+              className="flex-1 text-center py-2.5 rounded-xl text-sm font-semibold transition-colors border"
+              style={{ borderColor: "#2DAAE1", color: "#2DAAE1" }}
+            >
+              Ver finca
+            </Link>
+            <button
+              onClick={() => setShowModal(true)}
+              className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-sm font-semibold text-white transition-all hover:opacity-90 active:scale-95"
+              style={{ background: "#FF5A5F" }}
+            >
+              <WhatsAppIcon />
+              Cotizar
+            </button>
+          </div>
         </div>
       </div>
-    </div>
+
+      {showModal && (
+        <CotizarModal
+          nombreFinca={finca.nombre}
+          onClose={() => setShowModal(false)}
+        />
+      )}
+    </>
   );
 }

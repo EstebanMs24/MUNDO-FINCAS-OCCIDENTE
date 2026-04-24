@@ -13,34 +13,92 @@ const WhatsAppIcon = () => (
   </svg>
 );
 
+const PRESUPUESTOS = [
+  { label: "Menos de $300.000", value: "menos de $300.000" },
+  { label: "$300.000 – $500.000", value: "$300.000 a $500.000" },
+  { label: "$500.000 – $800.000", value: "$500.000 a $800.000" },
+  { label: "Más de $800.000", value: "más de $800.000" },
+  { label: "Flexible / No tengo límite claro", value: "flexible" },
+];
+
+function formatFecha(iso: string) {
+  return new Date(iso + "T00:00:00").toLocaleDateString("es-CO", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
+}
+
 export default function BotonWhatsApp({ nombreFinca }: Props) {
   const [fecha, setFecha] = useState("");
   const [personas, setPersonas] = useState(2);
+  const [presupuesto, setPresupuesto] = useState("");
+  const [errors, setErrors] = useState<Record<string, string>>({});
 
   const hoy = new Date().toISOString().split("T")[0];
-  const fechaDisplay = fecha || "[fecha por definir]";
-  const mensaje = `Hola, quiero reservar la finca ${nombreFinca} para la fecha ${fechaDisplay} para ${personas} personas.`;
+
+  const validate = () => {
+    const e: Record<string, string> = {};
+    if (!fecha) e.fecha = "Selecciona una fecha de llegada";
+    if (!presupuesto) e.presupuesto = "Selecciona tu rango de presupuesto";
+    return e;
+  };
+
+  const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    const errs = validate();
+    if (Object.keys(errs).length) {
+      e.preventDefault();
+      setErrors(errs);
+      return;
+    }
+    setErrors({});
+  };
+
+  const fechaDisplay = fecha ? formatFecha(fecha) : "[fecha por definir]";
+  const mensaje = `Hola 👋 Estoy interesado en la finca *${nombreFinca}* para *${personas} persona${personas !== 1 ? "s" : ""}*, llegando el *${fechaDisplay}*, con presupuesto de *${presupuesto || "[por definir]"}* por noche. ¿Está disponible?`;
   const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(mensaje)}`;
+
+  const inputBase =
+    "w-full border rounded-xl px-4 py-2.5 text-gray-900 text-sm focus:outline-none focus:ring-2 transition-all";
 
   return (
     <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
-      <h3 className="font-bold text-xl text-gray-900 mb-1">Reservar</h3>
-      <p className="text-gray-400 text-sm mb-5">Sin pagos en línea · Confirmación por WhatsApp</p>
+      <h3 className="font-bold text-xl mb-0.5" style={{ color: "#333333" }}>
+        Cotizar esta finca
+      </h3>
+      <p className="text-gray-400 text-sm mb-5">
+        Sin pagos en línea · Respuesta inmediata
+      </p>
 
       <div className="space-y-4">
+        {/* Fecha */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1.5">
-            Fecha de llegada
+            Fecha de llegada{" "}
+            <span style={{ color: "#FF5A5F" }}>*</span>
           </label>
           <input
             type="date"
             value={fecha}
-            onChange={(e) => setFecha(e.target.value)}
             min={hoy}
-            className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-gray-900 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
+            onChange={(e) => {
+              setFecha(e.target.value);
+              setErrors((prev) => ({ ...prev, fecha: "" }));
+            }}
+            className={`${inputBase} ${
+              errors.fecha
+                ? "border-red-300 focus:ring-red-200"
+                : "border-gray-200 focus:ring-blue-200"
+            }`}
           />
+          {errors.fecha && (
+            <p className="text-xs mt-1" style={{ color: "#FF5A5F" }}>
+              {errors.fecha}
+            </p>
+          )}
         </div>
 
+        {/* Personas */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1.5">
             Número de personas
@@ -48,36 +106,75 @@ export default function BotonWhatsApp({ nombreFinca }: Props) {
           <select
             value={personas}
             onChange={(e) => setPersonas(Number(e.target.value))}
-            className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-gray-900 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
+            className={`${inputBase} border-gray-200 focus:ring-blue-200`}
           >
-            {Array.from({ length: 15 }, (_, i) => i + 1).map((n) => (
+            {Array.from({ length: 30 }, (_, i) => i + 1).map((n) => (
               <option key={n} value={n}>
                 {n} persona{n !== 1 ? "s" : ""}
               </option>
             ))}
           </select>
         </div>
+
+        {/* Presupuesto */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1.5">
+            Presupuesto por noche{" "}
+            <span style={{ color: "#FF5A5F" }}>*</span>
+          </label>
+          <select
+            value={presupuesto}
+            onChange={(e) => {
+              setPresupuesto(e.target.value);
+              setErrors((prev) => ({ ...prev, presupuesto: "" }));
+            }}
+            className={`${inputBase} ${
+              errors.presupuesto
+                ? "border-red-300 focus:ring-red-200"
+                : "border-gray-200 focus:ring-blue-200"
+            }`}
+          >
+            <option value="">Selecciona tu rango...</option>
+            {PRESUPUESTOS.map((p) => (
+              <option key={p.value} value={p.value}>
+                {p.label}
+              </option>
+            ))}
+          </select>
+          {errors.presupuesto && (
+            <p className="text-xs mt-1" style={{ color: "#FF5A5F" }}>
+              {errors.presupuesto}
+            </p>
+          )}
+        </div>
       </div>
 
-      {/* Message preview */}
-      <div className="mt-4 bg-gray-50 rounded-xl p-3 text-xs text-gray-500 leading-relaxed border border-gray-100">
-        <span className="font-medium text-gray-600">Vista previa: </span>
+      {/* Preview */}
+      <div
+        className="mt-4 rounded-xl p-3 text-xs leading-relaxed border"
+        style={{ background: "#F5F5F5", borderColor: "#e5e7eb", color: "#555" }}
+      >
+        <span className="font-semibold" style={{ color: "#333" }}>
+          Mensaje que enviarás:{" "}
+        </span>
         {mensaje}
       </div>
 
-      {/* Animated button */}
-      <a href={url} target="_blank" rel="noopener noreferrer" className="btn-wa">
-        <span className="btn-wa-inner">
-          <WhatsAppIcon />
-          Reservar por WhatsApp
-        </span>
+      <a
+        href={url}
+        target="_blank"
+        rel="noopener noreferrer"
+        onClick={handleClick}
+        className="mt-4 w-full flex items-center justify-center gap-2.5 py-3.5 rounded-xl font-bold text-white text-base transition-all hover:opacity-90 active:scale-95"
+        style={{ background: "#FF5A5F" }}
+      >
+        <WhatsAppIcon />
+        Enviar cotización por WhatsApp
       </a>
 
       <p className="mt-3 text-center text-xs text-gray-400">
-        Atención personalizada · Respuesta inmediata
+        Sin compromiso · Atención personalizada
       </p>
     </div>
   );
 }
-
-//Pruuba
