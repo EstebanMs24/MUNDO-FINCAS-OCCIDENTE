@@ -203,7 +203,7 @@ export default function CotizarModal({ nombreFinca, onClose }: Props) {
             rel="noopener noreferrer"
             onClick={handleClick}
             className="w-full flex items-center justify-center gap-2.5 py-3.5 rounded-xl font-bold text-white text-base transition-all hover:opacity-90 active:scale-95"
-            style={{ background: "#FF5A5F" }}
+            style={{ background: "#25D366" }}
           >
             <WhatsAppIcon />
             Enviar cotización por WhatsApp

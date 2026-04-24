@@ -81,7 +81,7 @@ export default function CardLote({ lote }: Props) {
             target="_blank"
             rel="noopener noreferrer"
             className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-sm font-semibold text-white transition-all hover:opacity-90 active:scale-95"
-            style={{ background: "#FF5A5F" }}
+            style={{ background: "#25D366" }}
           >
             <WhatsAppIcon />
             Consultar
