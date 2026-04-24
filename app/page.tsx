@@ -163,10 +163,9 @@ export default async function HomePage() {
               href={WA_HERO}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-3 font-bold px-8 py-4 rounded-full text-lg transition-all hover:scale-105 shadow-2xl"
-              style={{ background: "#FF5A5F", color: "#fff" }}
+              className="btn-uiverse-wa"
             >
-              <WhatsAppIcon className="w-6 h-6" />
+              <WhatsAppIcon className="w-5 h-5" />
               Consultar disponibilidad
             </a>
             <Link
@@ -254,8 +253,7 @@ export default async function HomePage() {
               href={WA_HERO}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 font-bold px-8 py-4 rounded-full text-base transition-all hover:scale-105"
-              style={{ background: "#FF5A5F", color: "#fff" }}
+              className="btn-uiverse-wa"
             >
               <WhatsAppIcon />
               Empezar ahora
@@ -389,8 +387,7 @@ export default async function HomePage() {
               href={WA_HERO}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 font-bold px-6 py-3 rounded-full text-sm transition-all hover:opacity-90"
-              style={{ background: "#FF5A5F", color: "#fff" }}
+              className="btn-uiverse-wa"
             >
               <WhatsAppIcon className="w-4 h-4" />
               Hacer una pregunta — sin compromiso
@@ -418,8 +415,8 @@ export default async function HomePage() {
             href={WA_FINAL}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-3 font-bold px-10 py-5 rounded-full text-lg transition-all hover:scale-105 shadow-xl"
-            style={{ background: "#FF5A5F", color: "#fff" }}
+            className="btn-uiverse-wa"
+            style={{ fontSize: "15px", padding: "1.3em 3em" }}
           >
             <WhatsAppIcon className="w-6 h-6" />
             Sí, quiero escaparme
