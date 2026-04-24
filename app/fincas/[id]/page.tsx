@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import GaleriaImagenes from "@/components/GaleriaImagenes";
 import BotonWhatsApp from "@/components/BotonWhatsApp";
+import StickyWhatsAppBar from "@/components/StickyWhatsAppBar";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { FincaAPI, parseFinca } from "@/types/finca";
@@ -209,6 +210,9 @@ export default async function FincaDetallePage({ params }: Props) {
           </div>
         </div>
       </div>
+
+      {/* Sticky mobile CTA */}
+      <StickyWhatsAppBar nombreFinca={finca.nombre} precio={finca.precio} />
     </div>
   );
 }
