@@ -1,5 +1,6 @@
 import Link from "next/link";
 import CardFinca from "@/components/CardFinca";
+import CarruselFincas from "@/components/CarruselFincas";
 import { WHATSAPP_NUMBER, WHATSAPP_EMAIL } from "@/data/fincas";
 import { FincaAPI, parseFinca } from "@/types/finca";
 import { prisma } from "@/lib/prisma";
@@ -148,9 +149,29 @@ export default async function HomePage() {
             Occidente Antioqueño · Colombia
           </div>
 
-          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-5 leading-tight">
-            Tu próximo escape<br />
-            <span style={{ color: "#6BCB77" }}>te está esperando</span>
+          <h1
+            className="mb-5 leading-tight"
+            style={{ fontFamily: "var(--font-playfair)" }}
+          >
+            <span
+              className="block text-4xl sm:text-5xl md:text-6xl lg:text-[4.5rem]"
+              style={{ fontStyle: "italic", fontWeight: 400, letterSpacing: "-0.01em" }}
+            >
+              Escápate del estrés
+            </span>
+            <span
+              className="block text-2xl sm:text-3xl md:text-4xl lg:text-5xl mt-2"
+              style={{ fontWeight: 600, color: "rgba(255,255,255,0.90)" }}
+            >
+              y vive un fin de semana{" "}
+              <span style={{ color: "#6BCB77", fontStyle: "italic" }}>inolvidable</span>
+            </span>
+            <span
+              className="block text-xl sm:text-2xl md:text-3xl lg:text-4xl mt-1"
+              style={{ fontWeight: 400, color: "rgba(255,255,255,0.75)" }}
+            >
+              en una finca privada
+            </span>
           </h1>
 
           <p className="text-lg sm:text-xl md:text-2xl mb-10 text-white/85 max-w-2xl mx-auto leading-relaxed">
@@ -314,6 +335,11 @@ export default async function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* ══════════════════════════════════════════════════════
+          CARRUSEL
+      ══════════════════════════════════════════════════════ */}
+      <CarruselFincas />
 
       {/* ══════════════════════════════════════════════════════
           TESTIMONIOS
